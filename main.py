@@ -39,7 +39,7 @@ def index():
 def task_display_single_Fabfile(fabfile):
     """ Provide a fabfile to list only the tasks from that fabfile. """
     local_task_list = task_list.copy()
-    for fabfile_name in local_task_list.keys():
+    for fabfile_name in list(local_task_list.keys()):
         if fabfile_name == fabfile:
             continue
         del local_task_list[fabfile_name]
@@ -62,7 +62,7 @@ def task_display(fabfile, task_name):
 def execute_task(task, hosts, roles, *args, **kwargs):
     """ Execute a task, providing all the details from the form. """
     from fabric.api import env, execute
-    from StringIO import StringIO
+    from io import StringIO
     import sys
 
     env.hosts = hosts
@@ -77,16 +77,16 @@ def execute_task(task, hosts, roles, *args, **kwargs):
     try:
         data = execute(task, hosts=hosts, *args, **kwargs)
     except SystemExit:
-        print "fabric had a fatal exception, that caused it to exit."
+        print("fabric had a fatal exception, that caused it to exit.")
     finally:
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
     sys.stdout = sys.__stdout__
     sys.stderr = sys.__stderr__
 
-    print "data: %s" % data
-    print "out: %s" % str(output.getvalue())
-    print "err: %s" % str(error.getvalue())
+    print("data: %s" % data)
+    print("out: %s" % str(output.getvalue()))
+    print("err: %s" % str(error.getvalue()))
 
     return output.getvalue(), error.getvalue()
 
@@ -138,7 +138,7 @@ def task_execute(fabfile, task_name):
         return redirect("/fabfile/%(fabfile)s/task/%(task_name)s" % locals())
 
     from easyfab import task_to_dict
-    for field, value in form.items():
+    for field, value in list(form.items()):
         value = value.strip()
         if not value:
             continue
@@ -146,7 +146,7 @@ def task_execute(fabfile, task_name):
 
     missing_required_args = False
     for required_arg in task_to_dict(task)['required_args']:
-        if required_arg not in filtered_form.keys():
+        if required_arg not in list(filtered_form.keys()):
             missing_required_args = True
             flash("Missing required argument: %s" % required_arg)
 

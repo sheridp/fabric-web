@@ -8,7 +8,7 @@ def get_fab_tasks():
     fab_task_list = {}
 
     if type(settings.fabfile).__name__ == 'dict':
-        for alias, fabfile in settings.fabfile.items():
+        for alias, fabfile in list(settings.fabfile.items()):
             (docstring, tasks, default) = main.load_fabfile(fabfile)
             fab_task_list[alias] = {
                 'tasks': tasks,
@@ -60,7 +60,7 @@ def task_to_dict(task):
 
     if defaults:
         number_of_defaults = len(defaults) * -1
-        args_with_defaults = zip(args[number_of_defaults:], defaults)
+        args_with_defaults = list(zip(args[number_of_defaults:], defaults))
         args_without_defaults = args[:number_of_defaults]
     else:
         args_with_defaults = []
